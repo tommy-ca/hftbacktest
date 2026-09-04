@@ -211,6 +211,46 @@ The complete process of backtesting Binance Futures
 ---------------------------------------------------
 `high-frequency gridtrading <https://github.com/nkaz001/hftbacktest/blob/master/hftbacktest/examples/gridtrading.ipynb>`_: The complete process of backtesting Binance Futures using a high-frequency grid trading strategy implemented in Rust.
 
+
+Polymarket Overlay (this fork)
+==============================
+
+This repository (``tommy-ca/hftbacktest``) is a fork of
+`nkaz001/hftbacktest <https://github.com/nkaz001/hftbacktest>`_ with a
+**Polymarket backtest overlay**. The Python import remains ``hftbacktest``
+(same as upstream). See ``UPSTREAM.md`` and ``PRODUCT.md``.
+
+Overlay highlights:
+
+* ``polymarket_to_hbt`` — convert Polymarket L2 / trade frames to HftBacktest events
+* ``BacktestAssetPoly`` / ``init_orderbook`` — ROI ``[0, 1]`` presets
+* ``binary_fee_model`` — binary-outcome fee ``qty * rate * price * (1 - price)``
+* ``PolyAssetRecord`` / ``Stats.earn`` — settlement-aware stats helpers
+
+Minimal examples live under ``examples/polymarket/``. Upstream CEX tutorials
+under ``examples/`` are unchanged. ``collector`` / ``connector`` remain the
+upstream CEX live stack (not a Polymarket live product).
+
+Polymarket market data can be sourced from `pmdata.dev <https://pmdata.dev/>`_.
+
+.. code-block:: python
+
+   from hftbacktest import (
+       BacktestAssetPoly,
+       ROIVectorMarketDepthBacktest,
+       polymarket_to_hbt,
+   )
+
+   data = polymarket_to_hbt(l2_df, trade_df=trade_df)
+   asset = (
+       BacktestAssetPoly()
+           .data(data)
+           .constant_order_latency(20_000_000, 20_000_000)
+           .binary_fee_model(maker_fee_rate=-0.014, taker_fee_rate=0.07)
+           .no_partial_fill_exchange()
+   )
+   hbt = ROIVectorMarketDepthBacktest([asset])
+
 Migration to V2
 ===============
 Please see the `migration guide <https://hftbacktest.readthedocs.io/en/latest/migration2.html>`_.
