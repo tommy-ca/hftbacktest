@@ -109,6 +109,12 @@ class Stats:
 
     @property
     def earn(self) -> float:
+        """Last equity after fee (``equity_wo_fee - fee``).
+
+        For Polymarket, equity depends on mark-to-settlement prices from the
+        converter resolve book and/or ``PolyAssetRecord`` snap; see those
+        docstrings.
+        """
         equity_series = (
             self.entire.with_columns(
                 (pl.col('equity_wo_fee') - pl.col('fee')).alias('equity')
