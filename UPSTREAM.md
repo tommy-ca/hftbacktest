@@ -39,3 +39,22 @@ Skipped from pm (intentionally left upstream / not copied):
 - Replacing root README / deleting upstream `examples/` tutorials
 - CEX collector/connector diffs (none required for BinaryFee)
 - Agent-only noise (`.DS_Store`)
+
+## Rebase hygiene
+
+Keep this fork close to `nkaz001/hftbacktest` `master`.
+
+1. Run `scripts/check-upstream-drift.sh` (adds `upstream` remote if missing,
+   fetches, prints commits on `upstream/master` not in `HEAD`).
+2. Rebase or merge upstream regularly. Prefer identifiable overlay commits;
+   do **not** flatten Polymarket deltas into silent edits of upstream files
+   beyond the fee model / bindings already touched.
+3. After each sync, update the **Baseline tip** / pin line above to the new
+   upstream SHA you merged or rebased onto.
+
+Optional: wire the script into CI later (requires a token with `workflow`
+scope to add `.github/workflows/`). Until then, run it locally before rebases.
+
+Overlay commits should stay reviewable as additive product surface (converter,
+fee variant, stats helpers, examples, docs).
+
