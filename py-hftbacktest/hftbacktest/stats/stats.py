@@ -25,6 +25,13 @@ def fix_record_prices(
         record_arr: np.ndarray,
         settlement: bool = True
 ) -> np.ndarray:
+    """Snap trailing record prices toward binary settlement when enabled.
+
+    Uses the last finite mid: ``< 0.5`` → ``0.0``, ``> 0.5`` → ``1.0``,
+    exactly ``0.5`` unchanged. Fills trailing NaNs with that settle price.
+    Prefer converter resolve books for the true terminal mid; this snap is the
+    stats-side safety net.
+    """
     prices = record_arr['price']
     valid_idx = np.flatnonzero(np.isfinite(prices))
     if len(valid_idx) == 0:
@@ -483,8 +490,10 @@ class PolyAssetRecord(LinearAssetRecord):
     """
     Polymarket record helper.
 
-    It applies Polymarket settlement price handling and otherwise behaves like
-    LinearAssetRecord.
+    Applies ``fix_record_prices`` (snap last finite mid to 0/1) before acting
+    like ``LinearAssetRecord``. Dual settlement with the converter: resolve
+    injects a near-boundary book that usually sets the mid; this snap is only
+    a safety net when both run. See ``polymarket_to_hbt``.
     """
 
     def __init__(
