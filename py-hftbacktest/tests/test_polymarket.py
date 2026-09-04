@@ -247,6 +247,28 @@ class TestPolymarketOverlay(unittest.TestCase):
         self.assertEqual(trades['px'][1], 0.8)
         self.assertEqual(trades['qty'][1], 4.0)
 
+    def test_polymarket_to_hbt_rejects_null_book_size(self):
+        with self.assertRaises(ValueError):
+            polymarket_to_hbt(
+                {
+                    'market_slug': ['m'],
+                    'timestamp': [1_000],
+                    'local_timestamp': [1_100],
+                    'event_type': ['book'],
+                    'ask_prices': [[0.6]],
+                    'ask_sizes': [[None]],
+                    'bid_prices': [[0.4]],
+                    'bid_sizes': [[10.0]],
+                    'best_ask': [0.6],
+                    'best_bid': [0.4],
+                    'pc_price': [None],
+                    'pc_size': [None],
+                    'pc_side': [None],
+                    'new_tick_size': [None],
+                    'winning_outcome': [None],
+                },
+            )
+
     def test_polymarket_to_hbt_rejects_null_trade_price(self):
         with self.assertRaises(ValueError):
             polymarket_to_hbt(

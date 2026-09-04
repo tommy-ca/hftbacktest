@@ -87,7 +87,7 @@ def _make_book_events(
         end = pos + n
         sizes = sizes[:n]
         if None in sizes:
-            float(None)
+            raise ValueError("book sizes cannot contain null values.")
 
         out["ev"][pos:end] = DEPTH_SNAPSHOT_EVENT | side_flag
         out["exch_ts"][pos:end] = book_ts
