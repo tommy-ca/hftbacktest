@@ -1,0 +1,15 @@
+This repository redistributes substantial portions of:
+
+  hftbacktest
+  https://github.com/nkaz001/hftbacktest
+  Copyright (c) 2022 nkaz001@protonmail.com
+  Licensed under the MIT License.
+
+Polymarket overlay portions adapted from:
+
+  pm-hftbacktest
+  https://github.com/mileswangs/pm-hftbacktest
+  Copyright (c) 2026 mileswangs <wangshuosum@gmail.com>
+  Licensed under the MIT License.
+
+See LICENSE for the full MIT permission notice.

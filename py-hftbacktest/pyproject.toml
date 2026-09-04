@@ -18,7 +18,7 @@ dependencies = [
  "holoviews"
 ]
 
-keywords = ["hft", "high-frequency trading", "trading", "market-making", "backtest"]
+keywords = ["hft", "high-frequency trading", "trading", "market-making", "backtest", "polymarket"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
