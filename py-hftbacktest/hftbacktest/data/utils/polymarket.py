@@ -19,6 +19,10 @@ HBT_COLS = ["ev", "exch_ts", "local_ts", "px", "qty", "order_id", "ival", "fval"
 POLY_MIN_PRICE = 0.0
 POLY_MAX_PRICE = 1.0
 
+# Shared Yes/No outcome aliases for trade mirroring and resolve settlement.
+YES_OUTCOME_ALIASES = frozenset({"yes", "true", "1", "up"})
+NO_OUTCOME_ALIASES = frozenset({"no", "false", "0", "down"})
+
 
 def _ts_ns_expr(df: pl.DataFrame, col: str = "timestamp") -> pl.Expr:
     """Converts a timestamp column to nanoseconds as int64."""
@@ -105,9 +109,9 @@ def _settle_price_from_winning_outcome(winning_outcome: Any) -> float | None:
 
     if isinstance(winning_outcome, str):
         outcome = winning_outcome.strip().lower()
-        if outcome in {"yes", "true", "1", "up"}:
+        if outcome in YES_OUTCOME_ALIASES:
             return 1.0
-        if outcome in {"no", "false", "0", "down"}:
+        if outcome in NO_OUTCOME_ALIASES:
             return 0.0
         return None
 
@@ -167,7 +171,7 @@ def _normalize_trade_outcome(trade_df: pl.DataFrame) -> pl.DataFrame:
 
     side_expr = pl.col("side").cast(pl.Utf8).str.to_uppercase()
     outcome_expr = pl.col("outcome").cast(pl.Utf8).str.to_lowercase()
-    is_no_expr = outcome_expr.is_in(["no", "false", "0", "down"])
+    is_no_expr = outcome_expr.is_in(list(NO_OUTCOME_ALIASES))
 
     return trade_df.with_columns(
         pl.when(is_no_expr)
