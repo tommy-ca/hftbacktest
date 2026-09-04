@@ -198,9 +198,9 @@ class BacktestAssetPoly(BacktestAsset):
     """
     BacktestAsset preset for Polymarket data.
 
-    The Polymarket-specific fixed settings are applied at construction time.
-    Data, latency, and fee model remain configurable through the normal
-    BacktestAsset chain methods.
+    Fixes ROI ``[0, 1]``, tick/lot ``0.001``, and risk-adverse queue at
+    construction. Data, latency, and fee model remain chainable. To override
+    queue or tick, use plain ``BacktestAsset`` with the same ROI bounds.
     """
 
     def __init__(self):

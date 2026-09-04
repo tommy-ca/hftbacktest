@@ -21,3 +21,12 @@ Fees and settlement stats
 * ``Stats.earn`` is last equity after fee (``equity_wo_fee - fee``). Mark-to-
   settlement assumptions: resolve books in ``polymarket_to_hbt`` plus the
   ``PolyAssetRecord`` / ``fix_record_prices`` snap; see those docstrings.
+
+
+Preset escape hatch
+-------------------
+
+``BacktestAssetPoly`` fixes ROI ``[0, 1]``, tick/lot ``0.001``, and the
+risk-adverse queue model. To change queue or tick, use plain ``BacktestAsset``
+with the same ROI bounds instead of a second preset.
+

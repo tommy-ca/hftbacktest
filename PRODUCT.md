@@ -31,3 +31,24 @@ Not a Polymarket product surface:
 | Upstream tip pin | `5f3ec40...` | tag + tip fix | undeclared copy of ~same tree |
 
 Overlay features are additive relative to upstream `2.4.4` / `0.9.4`.
+
+
+## BacktestAssetPoly preset
+
+`BacktestAssetPoly` fixes ROI `[0, 1]`, tick/lot `0.001`, and the risk-adverse
+queue model at construction. Latency, fee model, exchange fill model, and data
+stay chainable.
+
+To override queue or tick while keeping the same ROI bounds, use plain
+`BacktestAsset` and set `roi_lb(0.0)` / `roi_ub(1.0)` yourself (plus the tick,
+lot, and queue model you want). No second preset class.
+
+## BacktestAssetPoly preset
+
+`BacktestAssetPoly` fixes ROI bounds (`0.0`–`1.0`), tick/lot (`0.001`), and
+`risk_adverse_queue_model` at construction. Data, latency, and fee model stay
+chainable.
+
+To override queue or tick/lot, use plain `BacktestAsset` with the same ROI
+bounds (`roi_lb(0.0)`, `roi_ub(1.0)`) and set the models you need. There is no
+second preset class.
