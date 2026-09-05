@@ -9,6 +9,15 @@ High-Frequency Trading Backtesting Tool
 
 This framework is designed for developing high frequency trading and market making strategies. It focuses on accounting for both feed and order latencies, as well as the order queue position for order fill simulation. The framework aims to provide more accurate market replay-based backtesting, based on full order book and trade tick feed data.
 
+**Dual audience (this fork).** ``tommy-ca/hftbacktest`` is a fork of
+`nkaz001/hftbacktest <https://github.com/nkaz001/hftbacktest>`_ with a
+Polymarket **backtest** overlay (see section below and ``PRODUCT.md``).
+Key Features, tutorials, and many badges below retain **upstream** HftBacktest
+identity chrome — they are not fork-specific delivery claims. Clone this fork
+from ``tommy-ca/hftbacktest``. Do not read upstream CEX live-bot Key Features
+or ``ROADMAP.md`` live/connector checkboxes as Polymarket live readiness or as
+fork CI green.
+
 Key Features
 ============
 
@@ -18,7 +27,7 @@ Key Features
 * Backtest accounting for both feed and order latency, using provided models or your own custom model.
 * Order fill simulation that takes into account the order queue position, using provided models or your own custom model.
 * Backtesting of multi-asset and multi-exchange models
-* Deployment of a live trading bot for quick prototyping and testing using the same algorithm code: currently for Binance Futures and Bybit. (Rust-only)
+* Deployment of a live trading bot for quick prototyping and testing using the same algorithm code: currently for Binance Futures and Bybit. (Rust-only; **upstream** CEX live stack — not a Polymarket live connector on this fork)
 
 Documentation
 =============
@@ -67,7 +76,7 @@ Or you can clone the latest development version from the Git repository with:
 
 .. code-block:: console
 
- git clone https://github.com/nkaz001/hftbacktest
+ git clone https://github.com/tommy-ca/hftbacktest
 
 Data Source & Format
 --------------------
@@ -225,11 +234,15 @@ Overlay highlights:
 * ``polymarket_to_hbt`` — convert Polymarket L2 / trade frames to HftBacktest events
 * ``BacktestAssetPoly`` / ``init_orderbook`` — ROI ``[0, 1]`` presets
 * ``binary_fee_model`` — binary-outcome fee ``qty * rate * price * (1 - price)``
-* ``PolyAssetRecord`` / ``Stats.earn`` — settlement-aware stats helpers
+* Dual settlement (intentional **primary + safety-net**): converter resolve-book
+  injection (primary) and ``PolyAssetRecord`` / ``fix_record_prices`` snap
+  (safety-net); ``Stats.earn`` uses mark-to-settlement prices from those paths
 
 Minimal examples live under ``examples/polymarket/``. Upstream CEX tutorials
-under ``examples/`` are unchanged. ``collector`` / ``connector`` remain the
-upstream CEX live stack (not a Polymarket live product).
+under ``examples/`` are unchanged (not wiped). ``collector`` / ``connector``
+remain the upstream CEX live stack (not a Polymarket live product). See
+``DEVELOPMENT.md`` for verify levers and toolchain footnotes — workflow or
+badge presence is not invent CI green.
 
 Polymarket market data can be sourced from `pmdata.dev <https://pmdata.dev/>`_.
 
@@ -275,7 +288,7 @@ Please see the `roadmap <https://github.com/nkaz001/hftbacktest/blob/master/ROAD
     :target: https://www.python.org/
 
 .. |codeql| image:: https://github.com/nkaz001/hftbacktest/actions/workflows/codeql.yml/badge.svg?branch=master&event=push
-    :alt: CodeQL
+    :alt: CodeQL (upstream chrome — not fork CI green)
     :target: https://github.com/nkaz001/hftbacktest/actions/workflows/codeql.yml
 
 .. |pypi| image:: https://badge.fury.io/py/hftbacktest.svg
@@ -292,19 +305,19 @@ Please see the `roadmap <https://github.com/nkaz001/hftbacktest/blob/master/ROAD
 
 .. |license| image:: https://img.shields.io/badge/License-MIT-green.svg
     :alt: License
-    :target: https://github.com/nkaz001/hftbacktest/blob/master/LICENSE
+    :target: https://github.com/tommy-ca/hftbacktest/blob/master/LICENSE
 
 .. |docs| image:: https://readthedocs.org/projects/hftbacktest/badge/?version=latest
     :target: https://hftbacktest.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+    :alt: Documentation Status (upstream RTD chrome)
 
 .. |roadmap| image:: https://img.shields.io/badge/Roadmap-gray
     :target: https://github.com/nkaz001/hftbacktest/blob/master/ROADMAP.md
-    :alt: Roadmap
+    :alt: Roadmap (upstream wishlist — not fork-done PASS)
 
 .. |github| image:: https://img.shields.io/github/stars/nkaz001/hftbacktest?style=social
     :target: https://github.com/nkaz001/hftbacktest
-    :alt: Github
+    :alt: Github (upstream social chrome; fork is tommy-ca/hftbacktest)
 
 .. |rustc| image:: https://shields.io/badge/rustc-1.90-blue
     :alt: Rust Version

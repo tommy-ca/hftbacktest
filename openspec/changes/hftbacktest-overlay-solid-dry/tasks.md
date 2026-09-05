@@ -27,27 +27,27 @@ Depends: §0
 Depends: §1 complete
 
 - [x] 2.1 `/home/box/bin/openspec validate --type change --strict hftbacktest-overlay-solid-dry`
-- [ ] 2.2 Probe labels honest — Static/Metadata/Unavailable only; no invented CI/LIVE PASS
-- [ ] 2.3 Confirm Must-nots present in proposal/tasks (fee crate; unify without tests; stats split; live; invent CI)
+- [x] 2.2 Probe labels honest — Static/Metadata/Unavailable only; no invented CI/LIVE PASS
+- [x] 2.3 Confirm Must-nots present in proposal/tasks (fee crate; unify without tests; stats split; live; invent CI)
 
 ## 3. STOP handoff
 
 Depends: §2 green
 
-- [ ] 3.1 Hand Horizon path: `openspec/changes/hftbacktest-overlay-solid-dry/`
-- [ ] 3.2 Ledger: propose VERIFIED; parks parked; soft-note for verify-ci-baseline if new tests land
-- [ ] 3.3 **STOP** — no apply until Todd go
+- [x] 3.1 Hand Horizon path: `openspec/changes/hftbacktest-overlay-solid-dry/`
+- [x] 3.2 Ledger: propose VERIFIED; parks parked; soft-note for verify-ci-baseline if new tests land
+- [x] 3.3 **STOP** — no apply until Todd go
 
 ## 4. Apply (Wave 5 — later workers; gated on Todd go)
 
 Depends: Todd go + §2 green
 
-- [ ] 4.1 Document dual settlement (converter resolve-book ∧ `PolyAssetRecord`/`fix_record_prices`) as intentional primary+safety-net in converter/stats docs as touched
-- [ ] 4.2 Strengthen `test_polymarket` (or adjacent Static) scenarios for dual-settlement coverage per ADDED requirements
-- [ ] 4.3 Fee-formula prose sync checklist across Rust / PyO3 / README where those docs are touched
-- [ ] 4.4 Merge delta into canonical `openspec/specs/polymarket-overlay/spec.md`
-- [ ] 4.5 Re-run local levers: `cargo test -p hftbacktest --lib`; targeted `python -m unittest …test_polymarket` — treat as Metadata levers, **not** invent CI green
-- [ ] 4.6 MUST NOT: fee crate extract; unify dual paths without tests; stats split; live connector; invent CI PASS
+- [x] 4.1 Document dual settlement (converter resolve-book ∧ `PolyAssetRecord`/`fix_record_prices`) as intentional primary+safety-net in converter/stats docs as touched
+- [x] 4.2 Strengthen `test_polymarket` (or adjacent Static) scenarios for dual-settlement coverage per ADDED requirements
+- [x] 4.3 Fee-formula prose sync checklist across Rust / PyO3 / README where those docs are touched
+- [x] 4.4 Merge delta into canonical `openspec/specs/polymarket-overlay/spec.md`
+- [x] 4.5 Re-run local levers: `cargo test -p hftbacktest --lib`; targeted `python -m unittest …test_polymarket` — treat as Metadata levers, **not** invent CI green
+- [x] 4.6 MUST NOT: fee crate extract; unify dual paths without tests; stats split; live connector; invent CI PASS
 
 ## 5. Archive
 

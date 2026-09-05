@@ -29,8 +29,11 @@ def fix_record_prices(
 
     Uses the last finite mid: ``< 0.5`` → ``0.0``, ``> 0.5`` → ``1.0``,
     exactly ``0.5`` unchanged. Fills trailing NaNs with that settle price.
-    Prefer converter resolve books for the true terminal mid; this snap is the
-    stats-side safety net.
+
+    Dual settlement (intentional primary + safety-net): prefer converter
+    resolve-book injection for the true terminal mid (primary). This snap is
+    the stats-side safety net when both paths run — keep both unless a later
+    Act-on with strong tests collapses them.
     """
     prices = record_arr['price']
     valid_idx = np.flatnonzero(np.isfinite(prices))
@@ -111,9 +114,9 @@ class Stats:
     def earn(self) -> float:
         """Last equity after fee (``equity_wo_fee - fee``).
 
-        For Polymarket, equity depends on mark-to-settlement prices from the
-        converter resolve book and/or ``PolyAssetRecord`` snap; see those
-        docstrings.
+        For Polymarket, equity depends on dual settlement mark-to-settlement
+        prices: converter resolve-book (primary) and/or ``PolyAssetRecord`` /
+        ``fix_record_prices`` snap (safety-net). See those docstrings.
         """
         equity_series = (
             self.entire.with_columns(
@@ -497,9 +500,12 @@ class PolyAssetRecord(LinearAssetRecord):
     Polymarket record helper.
 
     Applies ``fix_record_prices`` (snap last finite mid to 0/1) before acting
-    like ``LinearAssetRecord``. Dual settlement with the converter: resolve
-    injects a near-boundary book that usually sets the mid; this snap is only
-    a safety net when both run. See ``polymarket_to_hbt``.
+    like ``LinearAssetRecord``.
+
+    Dual settlement (intentional primary + safety-net) with the converter:
+    resolve-book injection is primary (near-boundary book usually sets the
+    mid); this snap is the safety net when both run. See ``polymarket_to_hbt``.
+    Keep-in-host: helpers stay in this module (no fee crate / no stats split).
     """
 
     def __init__(

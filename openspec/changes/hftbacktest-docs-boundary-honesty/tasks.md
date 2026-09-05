@@ -25,26 +25,26 @@ Depends: §0
 Depends: §1 complete
 
 - [x] 2.1 `/home/box/bin/openspec validate --type change --strict hftbacktest-docs-boundary-honesty`
-- [ ] 2.2 Probe honesty: no LIVE/CI invent in proposal
-- [ ] 2.3 Confirm Must-nots: no tutorial wipe; no ROADMAP live-as-done; no Polymarket live claim
+- [x] 2.2 Probe honesty: no LIVE/CI invent in proposal
+- [x] 2.3 Confirm Must-nots: no tutorial wipe; no ROADMAP live-as-done; no Polymarket live claim
 
 ## 3. STOP handoff
 
 Depends: §2 green
 
-- [ ] 3.1 Hand Horizon `openspec/changes/hftbacktest-docs-boundary-honesty/`
-- [ ] 3.2 Ledger: propose VERIFIED; parks parked
-- [ ] 3.3 **STOP** — no apply until Todd go
+- [x] 3.1 Hand Horizon `openspec/changes/hftbacktest-docs-boundary-honesty/`
+- [x] 3.2 Ledger: propose VERIFIED; parks parked
+- [x] 3.3 **STOP** — no apply until Todd go
 
 ## 4. Apply (Wave 5 — later workers; gated on Todd go)
 
 Depends: Todd go + §2 green
 
-- [ ] 4.1 Clarify README dual audience: fork overlay / tommy-ca vs retained upstream Key Features + nkaz001 badges (annotate or retarget where safe)
-- [ ] 4.2 DEVELOPMENT footnotes: libclang for default `live`; py `s3` may need rustc newer than crate MSRV 1.91.1
-- [ ] 4.3 Soft-after #1: if README overlay settlement/fee prose touched, align with dual-settlement primary+safety-net wording
-- [ ] 4.4 Merge delta into canonical `openspec/specs/product-boundary/spec.md`
-- [ ] 4.5 MUST NOT: claim Polymarket live; claim CI green; wipe upstream tutorials; promote ROADMAP live checkboxes as fork done
+- [x] 4.1 Clarify README dual audience: fork overlay / tommy-ca vs retained upstream Key Features + nkaz001 badges (annotate or retarget where safe)
+- [x] 4.2 DEVELOPMENT footnotes: libclang for default `live`; py `s3` may need rustc newer than crate MSRV 1.91.1
+- [x] 4.3 Soft-after #1: if README overlay settlement/fee prose touched, align with dual-settlement primary+safety-net wording
+- [x] 4.4 Merge delta into canonical `openspec/specs/product-boundary/spec.md`
+- [x] 4.5 MUST NOT: claim Polymarket live; claim CI green; wipe upstream tutorials; promote ROADMAP live checkboxes as fork done
 
 ## 5. Archive
 

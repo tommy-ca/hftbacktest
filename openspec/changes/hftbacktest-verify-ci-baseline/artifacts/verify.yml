@@ -1,0 +1,57 @@
+# Minimum verify baseline for documented levers (R-VER-04).
+# Honesty (R-VER-06): presence of this workflow file is NOT CI green.
+# Until real Actions check-run evidence exists, green remains Unavailable.
+# Discover path intentionally OUT (tmp_20240501.npz fixture gap).
+# Soft-after overlay-solid-dry: py-overlay runs dual-settlement tests via test_polymarket.
+name: Verify
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  rust-lib:
+    name: cargo test -p hftbacktest --lib
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libclang (default features include live → iceoryx2 bindgen)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libclang-dev clang
+      - name: Install Rust toolchain (crate MSRV)
+        uses: dtolnay/rust-toolchain@master
+        with:
+          # Honest pin ≥ crate rust-version 1.91.1 for this job.
+          toolchain: "1.91.1"
+      - name: Rust lib tests
+        run: cargo test -p hftbacktest --lib
+
+  py-overlay:
+    name: targeted test_polymarket
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Rust toolchain (py s3 skew vs MSRV)
+        uses: dtolnay/rust-toolchain@master
+        with:
+          # py-hftbacktest enables hftbacktest/s3; current AWS crates need rustc
+          # ≥ 1.94.1. Do NOT claim MSRV-only (1.91.1) green for this job.
+          toolchain: "1.98.1"
+      - name: Install Python build/test deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install maturin "numpy>=2.0,<2.3" "numba~=0.61" polars
+      - name: maturin develop (editable overlay extension)
+        run: maturin develop -m py-hftbacktest/Cargo.toml
+      - name: Targeted Polymarket overlay unittest (discover OUT)
+        env:
+          PYTHONPATH: ${{ github.workspace }}/py-hftbacktest:${{ github.workspace }}/py-hftbacktest/tests
+        run: python -m unittest py-hftbacktest.tests.test_polymarket
