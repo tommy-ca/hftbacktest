@@ -53,5 +53,5 @@ Depends: Todd go + §2 green
 
 Depends: §4 complete
 
-- [ ] 5.1 Archive per openspec-git-discipline after apply lands
-- [ ] 5.2 Update orchestrate ledger; reaffirm parks / no LIVE invent
+- [x] 5.1 Archive per openspec-git-discipline after apply lands
+- [x] 5.2 Update orchestrate ledger; reaffirm parks / no LIVE invent

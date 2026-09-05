@@ -50,5 +50,5 @@ Depends: Todd go + §2 green
 
 Depends: §4 complete
 
-- [ ] 5.1 Archive per openspec-git-discipline
-- [ ] 5.2 Update ledger; reaffirm no LIVE/CI invent
+- [x] 5.1 Archive per openspec-git-discipline
+- [x] 5.2 Update ledger; reaffirm no LIVE/CI invent

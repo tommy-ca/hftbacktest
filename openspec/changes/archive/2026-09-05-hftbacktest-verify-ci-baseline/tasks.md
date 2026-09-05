@@ -53,5 +53,5 @@ Depends: Todd go + §2 green + token/`workflow` park exit if needed
 
 Depends: §4 complete
 
-- [ ] 5.1 Archive per openspec-git-discipline
-- [ ] 5.2 Update ledger; reaffirm invent-CI-green Must-not
+- [x] 5.1 Archive per openspec-git-discipline
+- [x] 5.2 Update ledger; reaffirm invent-CI-green Must-not
