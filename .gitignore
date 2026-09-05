@@ -10,3 +10,6 @@ docs/_build
 **/tmp_*
 **/*.so
 .DS_Store
+
+# Git worktrees (fleet isolation; never commit tree contents)
+.worktrees/

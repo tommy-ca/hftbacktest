@@ -1,0 +1,23 @@
+schema: intent-driven
+
+# hftbacktest Wave-0 OpenSpec bootstrap (tip Static honesty only).
+# Overlay additive per UPSTREAM.md; no live Polymarket connector; no invent CI green.
+
+rules:
+  proposal:
+    - "Must use grill-me skill"
+    - "Must record a read-only Probe evidence record before authoring: exact Probe command/query, repo-relative path, result summary, and Static/Runtime/Metadata/Unavailable label"
+    - "MUST NOT invent live trading / Polymarket live connector / CI PASS receipts; Probe labels stay honest"
+    - "Overlay changes MUST stay additive per UPSTREAM.md (no silent flatten of Polymarket deltas into upstream identity)"
+  design:
+    - "Must use c4-diagrams skill"
+  adr:
+    - "Must use architectural-decision-records skill"
+  specs:
+    - "Must use gherkin-authoring skill"
+    - "Must record a read-only Probe evidence record before authoring: exact Probe command/query, repo-relative path, result summary, and Static/Runtime/Metadata/Unavailable label"
+    - "MODIFIED requirements MUST copy the full tip requirement body before edit"
+    - "MUST NOT claim Polymarket live connector or invent CI green"
+  tasks:
+    - "Propose atoms before offline verify; STOP before non-bootstrap product apply until Todd go"
+    - "MUST NOT enable live connectors; MUST NOT rewrite engine; MUST NOT invent CI green or live PASS"
