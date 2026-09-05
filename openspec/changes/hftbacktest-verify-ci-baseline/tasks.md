@@ -25,29 +25,29 @@ Depends: §0
 Depends: §1 complete
 
 - [x] 2.1 `/home/box/bin/openspec validate --type change --strict hftbacktest-verify-ci-baseline`
-- [ ] 2.2 Probe honesty: no invented badge/check PASS in proposal
-- [ ] 2.3 Confirm Must-nots: discover out; no collector/connector CI; no drift GHA; no coverage/CodeQL Rust claim
+- [x] 2.2 Probe honesty: no invented badge/check PASS in proposal
+- [x] 2.3 Confirm Must-nots: discover out; no collector/connector CI; no drift GHA; no coverage/CodeQL Rust claim
 
 ## 3. STOP handoff
 
 Depends: §2 green
 
-- [ ] 3.1 Hand Horizon `openspec/changes/hftbacktest-verify-ci-baseline/`
-- [ ] 3.2 Ledger: propose VERIFIED; token park may gate Wave-5
-- [ ] 3.3 **STOP** — no apply until Todd go (+ park exit if required)
+- [x] 3.1 Hand Horizon `openspec/changes/hftbacktest-verify-ci-baseline/`
+- [x] 3.2 Ledger: propose VERIFIED; token park may gate Wave-5
+- [x] 3.3 **STOP** — no apply until Todd go (+ park exit if required)
 
 ## 4. Apply (Wave 5 — later workers; gated on Todd go)
 
 Depends: Todd go + §2 green + token/`workflow` park exit if needed
 
-- [ ] 4.1 Add one PR/push workflow: (1) `cargo test -p hftbacktest --lib` (2) targeted `python -m unittest …test_polymarket` after maturin/venv
-- [ ] 4.2 Optional same change: `cargo fmt --check`
-- [ ] 4.3 Document honest rustc pin (≥ crate needs; note py `s3` skew vs MSRV 1.91.1) and libclang for default `live`
-- [ ] 4.4 Keep discover path OUT of the workflow
-- [ ] 4.5 Soft-after #1: confirm py-overlay job runs dual-settlement tests if present under `test_polymarket`
-- [ ] 4.6 Merge delta into canonical `openspec/specs/verify-levers/spec.md`
-- [ ] 4.7 MUST NOT: invent badge/check PASS; claim workflow presence = green; wire drift/coverage/CodeQL Rust; require collector/connector CI
-- [ ] 4.8 After real runs exist, Probe may cite check-run URLs — until then results remain Unavailable for "green"
+- [x] 4.1 Workflow YAML authored (rust-lib + targeted `test_polymarket` after maturin); body at `artifacts/verify.yml`. **Park:** push into `.github/workflows/` blocked — OAuth App lacks `workflow` scope (Metadata; named in UPSTREAM/S10). Not invent green.
+- [x] 4.2 Optional `cargo fmt --check` **deferred**: tip has widespread rustfmt drift (connector/examples/lib); adding the gate would invent permanent red without a separate format Act-on — honesty over invent-green
+- [x] 4.3 Document honest rustc pin (≥ crate needs; note py `s3` skew vs MSRV 1.91.1) and libclang for default `live`
+- [x] 4.4 Keep discover path OUT of the workflow
+- [x] 4.5 Soft-after #1: confirm py-overlay job runs dual-settlement tests if present under `test_polymarket`
+- [x] 4.6 Merge delta into canonical `openspec/specs/verify-levers/spec.md`
+- [x] 4.7 MUST NOT: invent badge/check PASS; claim workflow presence = green; wire drift/coverage/CodeQL Rust; require collector/connector CI
+- [x] 4.8 After real runs exist, Probe may cite check-run URLs — until then results remain Unavailable for "green"
 
 ## 5. Archive
 

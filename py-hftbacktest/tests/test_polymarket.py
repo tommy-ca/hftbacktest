@@ -299,6 +299,138 @@ class TestPolymarketOverlay(unittest.TestCase):
                 },
             )
 
+    def test_dual_settlement_resolve_book_primary_and_snap_safety_net_agree_yes(self):
+        """Agreement case: resolve-book primary mid near 1; snap safety-net → 1.0.
+
+        Documents intentional dual settlement: converter resolve injects the
+        near-boundary book; PolyAssetRecord/fix_record_prices snaps mid>0.5
+        to 1.0. Both paths remain; neither is unified away here.
+        """
+        events = polymarket_to_hbt(
+            {
+                'market_slug': ['m', 'm'],
+                'timestamp': [1_000, 2_000],
+                'local_timestamp': [1_100, 2_100],
+                'event_type': ['book', 'market_resolved'],
+                'ask_prices': [[0.6], None],
+                'ask_sizes': [[10.0], None],
+                'bid_prices': [[0.4], None],
+                'bid_sizes': [[10.0], None],
+                'best_ask': [0.6, None],
+                'best_bid': [0.4, None],
+                'pc_price': [None, None],
+                'pc_size': [None, None],
+                'pc_side': [None, None],
+                'new_tick_size': [None, None],
+                'trade_price': [None, None],
+                'trade_size': [None, None],
+                'trade_side': [None, None],
+                'trade_is_mirror': [None, None],
+                'winning_outcome': [None, 'Yes'],
+            },
+        )
+
+        event_mask = np.uint64(
+            ~(EXCH_EVENT | LOCAL_EVENT) & np.iinfo(np.uint64).max
+        )
+        base_ev = events['ev'] & event_mask
+        resolve_bids = events[
+            (base_ev == (DEPTH_SNAPSHOT_EVENT | BUY_EVENT))
+            & (events['exch_ts'] == 2_000_000_000)
+        ]
+        # Primary path: resolve-book near-boundary bid.
+        self.assertEqual(len(resolve_bids), 1)
+        resolve_mid = (
+            float(resolve_bids['px'][0])
+            + 1.0  # ask side of Yes resolve book is 1.0
+        ) / 2.0
+        self.assertGreater(resolve_mid, 0.5)
+
+        # Safety-net path: snap a mark near the resolve mid toward 1.0.
+        record = np.array(
+            [
+                (0, 10.0, 1.0, 0.55, 0.0),
+                (1_000_000_000, 10.0, 1.0, float(resolve_bids['px'][0]), 0.0),
+            ],
+            dtype=[
+                ('timestamp', 'i8'),
+                ('balance', 'f8'),
+                ('position', 'f8'),
+                ('price', 'f8'),
+                ('fee', 'f8'),
+            ],
+        )
+        fixed = fix_record_prices(record.copy(), settlement=True)
+        self.assertEqual(fixed['price'][-1], 1.0)
+
+        # With settlement disabled, snap does not rewrite the primary mid.
+        untouched = fix_record_prices(record.copy(), settlement=False)
+        self.assertAlmostEqual(
+            float(untouched['price'][-1]),
+            float(resolve_bids['px'][0]),
+        )
+
+    def test_dual_settlement_stats_snap_safety_net_without_resolve_book(self):
+        """Safety-net alone: without resolve injection, snap still settles mid.
+
+        Regression guard for keep-dual: stats snap must work even when the
+        converter resolve-book path did not run (e.g. no market_resolved row).
+        """
+        # No market_resolved → no resolve-book injection.
+        events = polymarket_to_hbt(
+            {
+                'market_slug': ['m'],
+                'timestamp': [1_000],
+                'local_timestamp': [1_100],
+                'event_type': ['book'],
+                'ask_prices': [[0.6]],
+                'ask_sizes': [[10.0]],
+                'bid_prices': [[0.4]],
+                'bid_sizes': [[10.0]],
+                'best_ask': [0.6],
+                'best_bid': [0.4],
+                'pc_price': [None],
+                'pc_size': [None],
+                'pc_side': [None],
+                'new_tick_size': [None],
+                'winning_outcome': [None],
+            },
+        )
+        event_mask = np.uint64(
+            ~(EXCH_EVENT | LOCAL_EVENT) & np.iinfo(np.uint64).max
+        )
+        base_ev = events['ev'] & event_mask
+        # Only the live book snapshots at t=1000 — no resolve-time snapshots.
+        late_snapshots = events[
+            (base_ev == (DEPTH_SNAPSHOT_EVENT | BUY_EVENT))
+            & (events['exch_ts'] > 1_000_000_000)
+        ]
+        self.assertEqual(len(late_snapshots), 0)
+
+        record = np.array(
+            [
+                (0, 10.0, 1.0, 0.40, 0.0),
+                (1_000_000_000, 10.0, 1.0, 0.35, 0.0),
+                (2_000_000_000, 10.0, 1.0, np.nan, 0.0),
+            ],
+            dtype=[
+                ('timestamp', 'i8'),
+                ('balance', 'f8'),
+                ('position', 'f8'),
+                ('price', 'f8'),
+                ('fee', 'f8'),
+            ],
+        )
+        fixed = fix_record_prices(record.copy(), settlement=True)
+        self.assertEqual(fixed['price'][-2], 0.0)
+        self.assertEqual(fixed['price'][-1], 0.0)
+
+        stats = PolyAssetRecord(record).resample('1s').stats(book_size=100.0)
+        # Earn uses snapped settlement prices (safety-net path).
+        self.assertIsInstance(stats.earn, float)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

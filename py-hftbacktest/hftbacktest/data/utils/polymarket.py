@@ -232,12 +232,18 @@ def polymarket_to_hbt(
     r"""
     Converts Polymarket L2 and trade DataFrames into an HftBacktest event array.
 
-    Settlement (resolve path): when ``l2_df`` includes a ``market_resolved`` row
-    with a recognized ``winning_outcome``, a near-boundary book snapshot is
-    appended (Yes ≈ 0.998/1.0, No ≈ 0.001/0.003). That book usually drives the
-    final mid used by mark-to-settlement stats. ``PolyAssetRecord`` /
-    ``fix_record_prices`` still snaps the last finite mid to 0 or 1 as a
-    safety net when both paths run.
+    Dual settlement (intentional primary + safety-net):
+
+    * **Primary — converter resolve-book:** when ``l2_df`` includes a
+      ``market_resolved`` row with a recognized ``winning_outcome``, a
+      near-boundary book snapshot is appended (Yes ≈ 0.998/1.0,
+      No ≈ 0.001/0.003). That book usually drives the final mid used by
+      mark-to-settlement stats.
+    * **Safety-net — stats snap:** ``PolyAssetRecord`` / ``fix_record_prices``
+      still snaps the last finite mid to 0 or 1 when both paths run.
+
+    Do not collapse these paths without strong scenario coverage. This is a
+    backtest overlay only — not a Polymarket live connector.
 
     Args:
         l2_df: DataFrame containing the Polymarket L2 data.
